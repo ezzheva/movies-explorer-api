@@ -1,5 +1,7 @@
 const { celebrate, Joi } = require('celebrate');
 
+const regex = /^(http:\/\/|https:\/\/)(www\.)?([\w-]+(\.[\w-]+)+)([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/;
+
 /** авторизация */
 module.exports.validateUserBody = celebrate({
   body: Joi.object().keys({
@@ -33,10 +35,10 @@ module.exports.validateCreateMovies = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required(),
-    trailerLink: Joi.string().required(),
-    thumbnail: Joi.string().required(),
-    movieId: Joi.required(),
+    image: Joi.string().required().regex(regex),
+    trailerLink: Joi.string().required().regex(regex),
+    thumbnail: Joi.string().required().regex(regex),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),

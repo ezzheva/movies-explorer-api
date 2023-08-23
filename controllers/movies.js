@@ -44,8 +44,8 @@ module.exports.createMovies = (req, res, next) => {
 };
 
 /** все фильмы */
-module.exports.getMovies = (_req, res, next) => {
-  Movie.find({})
+module.exports.getMovies = (req, res, next) => {
+  Movie.find({ owner: req.user._id })
     .then((movies) => res.send(movies))
     .catch(next);
 };
@@ -60,5 +60,10 @@ module.exports.deleteMovie = (req, res, next) => {
       }
       return Movie.deleteOne(movie).then(() => res.send(movie));
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new BadRequest('Некорректные данные при удалении фильма'));
+      }
+      return next(err);
+    });
 };

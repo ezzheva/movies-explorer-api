@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
@@ -9,12 +8,11 @@ const limiter = require('./middlewares/rateLimit');
 const router = require('./routes');
 const handleError = require('./middlewares/handleError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-
-const { PORT = 4000 } = process.env;
+const { PORT, MONGO_BD } = require('./utils/config');
 
 const app = express();
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb');
+mongoose.connect(MONGO_BD);
 
 app.use(cors({
   origin: [
